@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "test-strawberry-django"
+version = "0.1.0"
+description = "Project to test strawberry_django performance"
+authors = ["Thomas Weidinger <thomas@joweidi.de>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Django = "^4.2"
+django-ordered-model = "^3.7.4"
+django-filter = "^23.2"
+strawberry-django-plus = "^3.0.3"
+django-debug-toolbar = "^4.1.0"
+strawberry-graphql = "^0.187.5"
+strawberry-graphql-django = "^0.9.4"
+djangorestframework = "^3.14.0"
+faker = "^18.11.2"
+
+[tool.poetry.group.dev.dependencies]
+django-cors-headers = "^4.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
