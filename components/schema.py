@@ -10,7 +10,7 @@ from .types import ComponentQueries
 from categories.types import CategoryQueries
 
 
-Query = tools.merge_types("FullQuery", (CategoryQueries, ComponentQueries))
+Query = tools.merge_types("FullQuery", (ComponentQueries, CategoryQueries))
     
 
 schema = Schema(
