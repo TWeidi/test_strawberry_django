@@ -1,131 +1,143 @@
 from typing import Optional
 
-from strawberry import relay
-from strawberry_django_plus import gql
+from strawberry import auto, relay
+from strawberry_django import connection, filter, type
+from strawberry_django.relay import ListConnectionWithTotalCount
 
 from components import models
 
-@gql.django.type(models.UserModel)
+type(models.UserModel)
 class Profile(relay.Node):
-    first_name: gql.auto
-    last_name: gql.auto
-    username: gql.auto
-    email: gql.auto
+    first_name: auto
+    last_name: auto
+    username: auto
+    email: auto
 
 
-@gql.django.type(models.Company)
+type(models.Company)
 class Company(relay.Node):
-    name: gql.auto
-    url: gql.auto
+    name: auto
+    url: auto
 
 
-@gql.django.type(models.Type)
+@type(models.Type)
 class Type(relay.Node):
-    name: gql.auto
-    full_name: gql.auto
-    description: gql.auto
+    name: auto
+    full_name: auto
+    description: auto
 
 
-@gql.django.type(models.FNode)
+@type(models.FNode)
 class FNode(relay.Node):
-    path: gql.auto
-    ref: gql.auto
+    path: auto
+    ref: auto
 
 
-@gql.django.type(models.Library)
+@type(models.Library)
 class Library(relay.Node):
-    path: gql.auto
-    ref: gql.auto
+    path: auto
+    ref: auto
 
 
-@gql.django.type(models.LifecycleState)
+@type(models.LifecycleState)
 class LifecycleState(relay.Node):
-    name: gql.auto
-    full_name: gql.auto
-    description: gql.auto
+    name: auto
+    full_name: auto
+    description: auto
 
 
-@gql.django.type(models.Link)
+@type(models.Link)
 class Link(relay.Node):
-    name: gql.auto
-    url: gql.auto
+    name: auto
+    url: auto
 
 
-@gql.django.type(models.MountingType)
+@type(models.MountingType)
 class MountingType(relay.Node):
-    name: gql.auto
-    full_name: gql.auto
-    description: gql.auto
+    name: auto
+    full_name: auto
+    description: auto
 
 
-@gql.django.type(models.Qualification)
+@type(models.Qualification)
 class Qualification(relay.Node):
-    name: gql.auto
-    full_name: gql.auto
-    description: gql.auto
+    name: auto
+    full_name: auto
+    description: auto
 
 
-@gql.django.type(models.AnnotatedQualification)
+@type(models.AnnotatedQualification)
 class AnnotatedQualification(relay.Node):
-    annotation: gql.auto
+    annotation: auto
     component: 'Component'
     qualification: Qualification
 
 
-@gql.django.type(models.Review)
+@type(models.Review)
 class Review(relay.Node):
     annotated_qualification: AnnotatedQualification
     component: 'Component'
-    date: gql.auto
+    date: auto
     reviewer: Profile
 
 
-@gql.django.type(models.Package)
+@type(models.Package)
 class Package(relay.Node):
-    name: gql.auto
-    description: gql.auto
+    name: auto
+    description: auto
 
 
-@gql.django.type(models.BaseComponent)
+@type(models.BaseComponent)
 class BaseComponent(relay.Node):
     type: Type
-    autogenerate_description: gql.auto
-    autogenerate_value: gql.auto
-    description: gql.auto
-    f_nodes: gql.django.ListConnectionWithTotalCount[FNode] = gql.django.connection()
+    autogenerate_description: auto
+    autogenerate_value: auto
+    description: auto
+    f_nodes: ListConnectionWithTotalCount[FNode] = connection()
     library: Library
-    links: gql.django.ListConnectionWithTotalCount[Link] = gql.django.connection()
-    value: gql.auto
+    links: ListConnectionWithTotalCount[Link] = connection()
+    value: auto
 
-@gql.django.filter(models.Component, lookups=True)
+@filter(models.Component, lookups=True)
 class ComponentFilter:
-    description: gql.auto
-    type: gql.auto
+    description: auto
+    type: auto
 
 
-@gql.django.type(models.Component, filters=ComponentFilter)
+@type(models.Component, filters=ComponentFilter)
 class Component(relay.Node):
     type: Type
-    autogenerate_description: gql.auto
-    autogenerate_value: gql.auto
+    autogenerate_description: auto
+    autogenerate_value: auto
     creator: Profile
-    created: gql.auto
-    description: gql.auto
-    f_nodes: gql.django.ListConnectionWithTotalCount[FNode] = gql.django.connection(prefetch_related=['f_nodes'])
-    last_modified: gql.auto
+    created: auto
+    description: auto
+    f_nodes: ListConnectionWithTotalCount[FNode] = connection(prefetch_related=['f_nodes'])
+    last_modified: auto
     last_modifier: Profile
     library: Library
     lifecycle_state: LifecycleState
-    links: gql.django.ListConnectionWithTotalCount[Link] = gql.django.connection(prefetch_related=['links'])
+    links: ListConnectionWithTotalCount[Link] = connection(prefetch_related=['links'])
     manufacturer: Company
-    mpn: gql.auto
+    mpn: auto
     mounting: MountingType
     package: Optional[Package]
-    remarks: gql.auto
-    reviews: gql.django.ListConnectionWithTotalCount[Review] = gql.django.connection(prefetch_related=['reviews'])
-    stock: gql.auto
-    qualifications: gql.django.ListConnectionWithTotalCount[Qualification] = gql.django.connection(prefetch_related=['qualifications'])
-    value: gql.auto
-    x: gql.auto
-    y: gql.auto
-    z: gql.auto
+    remarks: auto
+    reviews: ListConnectionWithTotalCount[Review] = connection(prefetch_related=['reviews'])
+    stock: auto
+    qualifications: ListConnectionWithTotalCount[Qualification] = connection(prefetch_related=['qualifications'])
+    value: auto
+    x: auto
+    y: auto
+    z: auto
+
+
+@type
+class ComponentQueries:
+    """All available queries for this app."""
+    node: Optional[relay.Node] = relay.node()
+
+    types: ListConnectionWithTotalCount[Type] = connection()
+    base_components: ListConnectionWithTotalCount[BaseComponent] = connection()
+    components: ListConnectionWithTotalCount[Component] = connection()
+    links: ListConnectionWithTotalCount[Link] = connection()
